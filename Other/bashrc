@@ -62,7 +62,7 @@
 #
 # Uncomment to turn on programmable completion enhancements.
 # Any completions you add in ~/.bash_completion are sourced last.
-# [[ -f /etc/bash_completion ]] && . /etc/bash_completion
+[[ -f /etc/bash_completion ]] && . /etc/bash_completion
 
 # History Options
 #
@@ -199,7 +199,7 @@ alias ls='ls -hF --color=auto'                 # classify files in colour
 # alias cd=cd_func
 
 # Add user's binary directory
-export PATH="/home/${USER}/usr/bin:${PATH}"
+export PATH="/home/${USER}/usr/bin:~/bin:${PATH}"
 
 # Set up dircolors
 eval `dircolors ~/.dircolors`
@@ -218,7 +218,12 @@ export LYNX_LSS=~/.config/lynx.lss
 
 # Mount the portable Documents folder, if it isn't already
 if [ ! -d Documents ];
-then mount -f $(cygpath -m $USBDRVPATH)Documents /home/ntmoe/Documents;
+then mount -f $(cygpath -m $USBDRVPATH)Documents /home/mruwek/Documents;
+fi
+
+# Mount the portable Dropbox folder, if it isn't already
+if [ ! -d Dropbox ];
+then mount -f $(cygpath -m $USBDRVPATH)Dropbox /home/mruwek/Dropbox;
 fi
 
 # Figure out where Adobe Reader or Acrobat is
@@ -230,7 +235,7 @@ acropath=$(
   )
 )
 
-# alias ls='ls --color'
+alias ls='ls --color'
 alias acrobat='cyg-wrapper.sh "$(echo $acropath)"'
 alias gvim='cyg-wrapper.sh "$USBDRV/PortableApps/gVimPortable/gvimPortable.exe" --fork=2 --binary-opt=--cmd,"set shellslash",--cmd,"set shell=bash",--cmd,"set ff=unix"'
 alias st='cyg-wrapper.sh "$USBDRV/PortableApps/SublimeTextPortable/sublime_text.exe" --fork=2'
@@ -245,4 +250,32 @@ alias units='rlwrap units'
 alias multivalent='java -cp $(cygpath -m $CYGROOT)/home/${USER}/usr/lib/Multivalent20060102.jar'
 
 # Set a default prompt of: user@host and current_directory
-PS1='\[\e]0;\w\a\]\n\[\e[36m\]\u@\h: \[\e[33m\]\w\[\e[0m\]\n\$ '
+PS1='\[\033[0;32m\]\u\[\033[0;37m\]@\[\033[01;32m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
+
+# Fix shift-insert in vim
+if tty --quiet ; then
+    stty stop undef
+fi
+
+# Set default editor
+export EDITOR="vim"
+
+# Turn vim super-powers in terminal
+set -o vi
+
+# Aliases for topydo and mutt
+if [[ -f /cygdrive/e/Dropbox/todo/todo.txt ]]; then
+    alias todo="topydo"
+elif [[ -f /cygdrive/f/Dropbox/todo/todo.txt ]]; then 
+    alias todo="topydo -c ~/.topydo-f"
+    alias mutt="mutt -F ~/.muttrc-f"
+elif [[ -f /cygdrive/g/Dropbox/todo/todo.txt ]]; then 
+    alias todo="topydo -c ~/.topydo-g"
+    alias mutt="mutt -F ~/.muttrc-g"
+elif [[ -f /cygdrive/h/Dropbox/todo/todo.txt ]]; then 
+    alias todo="topydo -c ~/.topydo-h"
+    alias mutt="mutt -F ~/.muttrc-h"
+fi
+
+# Turn on bash-completion for aliased topydo
+complete -F _todo todo
