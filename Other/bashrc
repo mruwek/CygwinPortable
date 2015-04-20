@@ -263,19 +263,8 @@ export EDITOR="vim"
 # Turn vim super-powers in terminal
 set -o vi
 
-# Aliases for topydo and mutt
-if [[ -f /cygdrive/e/Dropbox/todo/todo.txt ]]; then
-    alias todo="topydo"
-elif [[ -f /cygdrive/f/Dropbox/todo/todo.txt ]]; then 
-    alias todo="topydo -c ~/.topydo-f"
-    alias mutt="mutt -F ~/.muttrc-f"
-elif [[ -f /cygdrive/g/Dropbox/todo/todo.txt ]]; then 
-    alias todo="topydo -c ~/.topydo-g"
-    alias mutt="mutt -F ~/.muttrc-g"
-elif [[ -f /cygdrive/h/Dropbox/todo/todo.txt ]]; then 
-    alias todo="topydo -c ~/.topydo-h"
-    alias mutt="mutt -F ~/.muttrc-h"
-fi
+# Aliases for topydo
+alias todo="topydo"
 
 # Turn on bash-completion for aliased topydo
 complete -F _todo todo
