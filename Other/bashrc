@@ -204,6 +204,10 @@ export PATH="/home/${USER}/usr/bin:~/bin:${PATH}"
 # Set up dircolors
 eval `dircolors ~/.dircolors`
 
+# Base16 Shell
+BASE16_SHELL="$HOME/.config/base16-shell/base16-atelierseaside.dark.sh"
+[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
+
 # Set display variable
 DISPLAY=:0; export DISPLAY
 
@@ -232,10 +236,10 @@ acropath=$(
     echo $(
       reg query HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\acrobat\\shell\\open\\command /ve | awk -F"\"" '{ print $2 }'
     )
-  )
+  ) > /dev/null 2>&1
 )
 
-alias ls='ls --color'
+alias ls='ls --color=auto -FhX --group-directories-first'
 alias acrobat='cyg-wrapper.sh "$(echo $acropath)"'
 alias gvim='cyg-wrapper.sh "$USBDRV/PortableApps/gVimPortable/gvimPortable.exe" --fork=2 --binary-opt=--cmd,"set shellslash",--cmd,"set shell=bash",--cmd,"set ff=unix"'
 alias st='cyg-wrapper.sh "$USBDRV/PortableApps/SublimeTextPortable/sublime_text.exe" --fork=2'
