@@ -204,10 +204,6 @@ export PATH="/home/${USER}/usr/bin:~/bin:${PATH}"
 # Set up dircolors
 eval `dircolors ~/.dircolors`
 
-# Base16 Shell
-BASE16_SHELL="$HOME/.config/base16-shell/base16-atelierseaside.dark.sh"
-[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
-
 # Set display variable
 DISPLAY=:0; export DISPLAY
 
@@ -230,28 +226,18 @@ if [ ! -d Dropbox ];
 then mount -f $(cygpath -m $USBDRVPATH)Dropbox /home/mruwek/Dropbox;
 fi
 
-# Figure out where Adobe Reader or Acrobat is
-acropath=$(
-  cygpath -m $(
-    echo $(
-      reg query HKEY_LOCAL_MACHINE\\SOFTWARE\\Classes\\acrobat\\shell\\open\\command /ve | awk -F"\"" '{ print $2 }'
-    )
-  ) > /dev/null 2>&1
-)
-
 alias ls='ls --color=auto -FhX --group-directories-first'
-alias acrobat='cyg-wrapper.sh "$(echo $acropath)"'
 alias gvim='cyg-wrapper.sh "$USBDRV/PortableApps/gVimPortable/gvimPortable.exe" --fork=2 --binary-opt=--cmd,"set shellslash",--cmd,"set shell=bash",--cmd,"set ff=unix"'
-alias st='cyg-wrapper.sh "$USBDRV/PortableApps/SublimeTextPortable/sublime_text.exe" --fork=2'
+
+function firefox() {
+    vimperatorrc="-vimperator +u=$USBDRV/PortableApps/FirefoxPortable/_vimperatorrc"
+    cyg-wrapper.sh "$USBDRV/PortableApps/FirefoxPortable/FirefoxPortable.exe" --fork=2 $vimperatorrc
+}
+alias google-chrome='cyg-wrapper.sh "$USBDRV/PortableApps/GoogleChromePortable/GoogleChromePortable.exe" --fork=2'
 alias newterm='mintty /bin/env CHERE_INVOKING=1 /bin/bash -l &'
-alias gtypist='gtypist -wi'
 alias explorer='cyg-wrapper.sh "explorer" --slashed-opt'
-alias startxwin='run /usr/bin/bash.exe -l -c "/usr/bin/startxwin -- -nolock -unixkill"'
-alias sumatra='startSumatra.sh'
 alias lynx='lynx -use_mouse'
-alias md='cyg-wrapper.sh "$USBDRV/PortableApps/MarkdownWinPortable/MarkdownWin.exe" --fork=2'
-alias units='rlwrap units'
-alias multivalent='java -cp $(cygpath -m $CYGROOT)/home/${USER}/usr/lib/Multivalent20060102.jar'
+eval "$(thefuck --alias)"
 
 # Set a default prompt of: user@host and current_directory
 PS1='\n\[\033[0;32m\]\u\[\033[0;37m\]@\[\033[01;32m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
@@ -261,14 +247,18 @@ if tty --quiet ; then
     stty stop undef
 fi
 
+HISTCONTROL=ignoreboth:erasedups
+
 # Set default editor
 export EDITOR="vim"
 
 # Turn vim super-powers in terminal
 set -o vi
 
-# Aliases for topydo
-alias todo="topydo"
+# don't use pager if output fits on screen
+export PAGER='less -FRSX'
 
-# Turn on bash-completion for aliased topydo
-complete -F _todo todo
+alias rnr1='date_rel 111d'
+alias rnr2='date_rel 83d'
+alias rnr3='date_rel 62d'
+alias rnr4='date_rel 41d'
