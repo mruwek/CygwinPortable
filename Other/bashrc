@@ -254,7 +254,7 @@ alias units='rlwrap units'
 alias multivalent='java -cp $(cygpath -m $CYGROOT)/home/${USER}/usr/lib/Multivalent20060102.jar'
 
 # Set a default prompt of: user@host and current_directory
-PS1='\[\033[0;32m\]\u\[\033[0;37m\]@\[\033[01;32m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
+PS1='\n\[\033[0;32m\]\u\[\033[0;37m\]@\[\033[01;32m\]\h\[\033[01;34m\] \W \$\[\033[00m\] '
 
 # Fix shift-insert in vim
 if tty --quiet ; then
